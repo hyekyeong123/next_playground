@@ -1,7 +1,7 @@
 "use client";
 import {
   ANONYMOUS,
-  loadTossPayments,
+  loadTossPayments, TossPaymentsSDK,
   TossPaymentsWidgets
 } from "@tosspayments/tosspayments-sdk";
 import { useState } from "react";
@@ -11,13 +11,13 @@ import { v4 as uuidv4 } from "uuid"; // ES Modules
 export default function Home() {
   // 버튼 클릭 시 결제 위젯을 띄우는 상태 관리
   const [isPaymentWidgetVisible, setIsPaymentWidgetVisible] = useState(false);
-  const [tossPayments, setTossPayments] = useState<TossPaymentsWidgets | null>(null);
+  const [widgets, setWidgets] = useState<TossPaymentsWidgets>();
 
   // 결제 위젯 초기화 함수
   const initializeTossPayments = async () => {
-    if (!tossPayments) {
-      const loadedTossPayments = await loadTossPayments(process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY);
-      setTossPayments(loadedTossPayments);
+    if (!widgets) {
+      const loadedTossPayments = await loadTossPayments("test_gck_QbgMGZzorz5j5K0JNAKPVl5E1em4");
+
 
       const widgets = loadedTossPayments.widgets({
         customerKey: ANONYMOUS,
@@ -32,6 +32,8 @@ export default function Home() {
         selector: "#payment-widget",
         variantKey: "DEFAULT",
       });
+
+      setWidgets(widgets);
     }
   };
 
@@ -51,26 +53,34 @@ export default function Home() {
 
     try {
       const result = await sendPaymentRequest({
-        orderIdx: 20,
+        orderIdx: 58,
         tossOrderId,
-        amount: 10000,
+        amount: 1000,
       });
 
       // @ts-ignore
-      if (tossPayments && result.status === 200) {
-        await tossPayments?.requestPayment('카드', {
-          amount: 10000,
+      widgets?.setAmount({
+        currency:"KRW"
+        ,value:1000
+      })
+
+      if (widgets && result.status === 200) {
+        await  widgets.requestPayment({
           orderId: tossOrderId,
           orderName: 'Test Order',
           customerName: 'Test Customer',
           successUrl: window.location.origin + '/success',
           failUrl: window.location.origin + '/fail',
+          metadata:{
+            orderIdx:58,
+            attendeeIdx:450
+          }
         });
       } else {
-        console.error('Payment request failed:', result);
+        alert(result);
       }
     } catch (error) {
-      console.error('Error during payment process:', error);
+      alert(error);
     }
   };
 

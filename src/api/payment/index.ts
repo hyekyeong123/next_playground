@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "http://localhost:8045",
+  baseURL: "https://ff44-211-117-67-140.ngrok-free.app/",
   withCredentials: true,
   headers: {
     conferenceIdx:4862,
