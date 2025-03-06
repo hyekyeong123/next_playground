@@ -11,12 +11,12 @@ import { v4 as uuidv4 } from "uuid"; // ES Modules
 export default function Home() {
   // 버튼 클릭 시 결제 위젯을 띄우는 상태 관리
   const [isPaymentWidgetVisible, setIsPaymentWidgetVisible] = useState(false);
-  const [tossPayments, setTossPayments] = useState<TossPaymentsWidgets>(null);
+  const [tossPayments, setTossPayments] = useState<TossPaymentsWidgets | null>(null);
 
   // 결제 위젯 초기화 함수
   const initializeTossPayments = async () => {
     if (!tossPayments) {
-      const loadedTossPayments = await loadTossPayments(process.env.TOSS_CLIENT_KEY);
+      const loadedTossPayments = await loadTossPayments(process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY);
       setTossPayments(loadedTossPayments);
 
       const widgets = loadedTossPayments.widgets({
