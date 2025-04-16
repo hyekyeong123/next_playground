@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 
-const QRLogin = () => {
+
+const QRLoginVRedis = () => {
     const [data, setData] = useState(null);
     const pathname = usePathname();
     console.log("pathname",pathname);
@@ -35,4 +36,4 @@ const QRLogin = () => {
     );
 };
 
-export default QRLogin;
+export default QRLoginVRedis;

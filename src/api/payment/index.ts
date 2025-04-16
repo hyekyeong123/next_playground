@@ -4,8 +4,8 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL: "http://localhost:8045",
   withCredentials: true,
   headers: {
-    conferenceIdx:4862,
-    Authorization: `Bearer eyJzZXJ2aWNlX3R5cGUiOiJwY29fY2xpZW50IiwiYWxnIjoiSFMyNTYifQ.eyJqdGkiOiI0MzlmM2VkMC1jMGZlLTQ3MmYtODVkZi0zNjQ2MDJiODY0YzUiLCJpYXQiOjE3NDEzMzA5NjgsInd1c2VyX2lkeCI6MTI0MywiZXhwIjoxNzQzMTMwOTY4fQ.EGy_yFbPI6sSmVxkT6TjxblhI88XwW39YeWLGVPaLA8`, //
+    conferenceIdx:12724,
+    Authorization: `Bearer eyJzZXJ2aWNlX3R5cGUiOiJwY29fYWRtaW4iLCJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI4M2VmNzY1MC0xYzdmLTRkMTEtODZkNS1lMTBkOTg2MzAyMDgiLCJpYXQiOjE3NDQwODkwMzMsInd1c2VyX2lkeCI6ODY4LCJleHAiOjE3NDQxMDcwMzN9.08dahpwES6Dx9P4NkAZCCO1GvB9BKbboNMcCIQd_osH5AfSDqv01l3_CTbwmTZxq`,
   },
 });
 

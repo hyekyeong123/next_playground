@@ -1,28 +1,21 @@
 "use client";
 import { useState, useEffect } from 'react';
-
-interface LoginRedisData {
-    userIdx: number;         // 사용자 식별자
-    createT: string;         // 생성 시간
-    sessionId: string;       // 세션 ID
-    status: string;          // 상태: 'pending', 'active', 'fail'
-    statusMessage?: string;    // 실패 메시지 (선택적)
-    qrImage: string;
-}
+import { v4 as uuidv4 } from "uuid";
 export default function QrLogin() {
     const [qrImage, setQrImage] = useState<string | null>(null);
-
+    const [sseToken, setSseToken] = useState<string | null>(null);
+    const TRANSMISSION_TYPE = "api";
      function qrLogin(){
-         // session은 백엔드에서 qr이미지와 함께 내려줄 값임, 또한 이벤트를 전송할때 id값으로 사용함
-         let session = "9ac65d98-268e-44d6-af9a-96d9c9ec9529";
-         const url = "http://localhost:8040/api/public/sse/qr-login/"+session;
+         const sseToken = uuidv4();
+         setSseToken(sseToken)
+         const url = "http://localhost:8040/api/public/sse/qr-login/"+TRANSMISSION_TYPE+"/"+sseToken;
          const eventSource = new EventSource(url);
 
          eventSource.onopen = () => {
              console.log("SSE 연결됨.");
          };
 
-         eventSource.addEventListener("qr_login_"+session, (event) => {
+         eventSource.addEventListener("qr_login/"+sseToken, (event) => {
              console.log("수신된 데이터 원본:", event.data);
 
              const data = JSON.parse(event.data);
@@ -32,11 +25,11 @@ export default function QrLogin() {
              }else{
                  if(data.status === 'active'){
                      alert('로그인 성공!');
-
-                     // 성공하거나 실패할때 eventSource닫는게 아니라 qr을 갱신해야함
                      eventSource.close();
-                 }else if(data.status === 'fail'){
-                     alert('로그인 실패!');
+                 }else if(data.status === 'failed'){
+                     // QR을 생성할 수 없습니다. 관리자에게 문의하세요.
+                     alert(data.statusMessage);
+                     return;
                  }
                  if (data.qrImage) {
                      setQrImage(`data:image/png;base64,${data.qrImage}`);// 받은 QR 이미지를 상태에 저장
@@ -76,6 +69,7 @@ export default function QrLogin() {
                 <h1>QR 로그인 테스트</h1>
                 {qrImage && (
                     <div>
+                        {sseToken}
                         <img src={qrImage} alt="QR Code" />
                     </div>
                 )}
